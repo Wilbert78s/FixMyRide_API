@@ -106,11 +106,13 @@ const addDetailUserData = async (request, h) => {
     const user = await docRef.get();
 
     // The ID of your GCS bucket
-    const bucketName = 'fixmyride_profilepicture';      
-    // The new ID for your GCS file
-    const destFileName = `${user.id}.png`;
+    const bucketName = 'fixmyride_profilepicture';     
 
-    const url_image = `https://storage.cloud.google.com/${bucketName}/${destFileName}`;
+    // The new ID for your GCS file
+    const fileName = `${user.id}.png`;
+    const encodedFileName = fileName.replace(/@/g, "");
+    
+    const url_image = `https://storage.googleapis.com/${bucketName}/${encodedFileName}`;
 
     //ada gambar baru
     if(image._data.length!=0){ 
@@ -125,7 +127,7 @@ const addDetailUserData = async (request, h) => {
       const myBucket = storage.bucket(bucketName);
 
       // Create a reference to a file object
-      const file = myBucket.file(destFileName);
+      const file = myBucket.file(encodedFileName);
 
       // Create a pass through stream from a string
       const passthroughStream = new stream.PassThrough();
